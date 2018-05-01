@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #include "bmp.h"
-void writeLine(int origWidth, int origPadding,int size,int padding,FILE *inptr, FILE *outptr);
+void writeLine(int origWidth, int origPadding, int size, int padding, FILE *inptr, FILE *outptr);
 
 int main(int argc, char *argv[])
 {
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     {
         for (int j = 0; j < size; j++)
         {
-            writeLine(origWidth, origPadding,size,padding,inptr,outptr);
+            writeLine(origWidth, origPadding, size, padding, inptr, outptr);
             // go back to beginning of scanline to reprint
             fseek(inptr, -lineSize, SEEK_CUR);
         }
@@ -100,7 +100,8 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void writeLine(int origWidth, int origPadding,int size,int padding,FILE *inptr, FILE *outptr) {
+void writeLine(int origWidth, int origPadding, int size, int padding, FILE *inptr, FILE *outptr)
+{
     // iterate over pixels in scanline
     for (int j = 0; j < origWidth; j++)
     {

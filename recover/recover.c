@@ -43,13 +43,13 @@ int main(int argc, char *argv[])
                 fclose(outptr);
             }
             imgFound = 1;
-            sprintf(outfile, "%03i.jpg", outFileCnt);
-            outptr = fopen(outfile, "w");
-            outFileCnt++;
+            sprintf(outfile, "%03i.jpg", outFileCnt);//create a Jpeg file.
+            outptr = fopen(outfile, "w");//open the jpg file
+            outFileCnt++;//increment count
         }
         if (imgFound)
         {
-            fwrite(&buffer, 512, 1, outptr);
+            fwrite(&buffer, 512, 1, outptr);//write to the byte array.
         }
     }
 

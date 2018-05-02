@@ -1,47 +1,58 @@
-// Copies a BMP file
+// recovers all Jpeg files from memory card
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <stdint.h>
 
 int main(int argc, char *argv[])
 {
     // ensure proper usage
     if (argc != 2)
     {
-        fprintf(stderr, "Usage: recover rawfile\n");
+        fprintf(stderr, "Usage: recover image\n");
         return 1;
     }
 
     char *infile = argv[1];
+    int outFileCnt = 0;
+    char outfile[8];//name of jpeg file
+    typedef uint8_t  BYTE;
+    BYTE buffer[512];//data type BYTE array
+    FILE *outptr = NULL;
+    short imgFound = 0;//short is a small integer set to false
 
-    // open input file
+    // open memory card
     FILE *inptr = fopen(infile, "r");
+
     if (inptr == NULL)
     {
         fprintf(stderr, "Could not open %s.\n", infile);
         return 2;
     }
-    printf("infile : %s\n",infile);
-    //int outFileCnt = 0;
-    char buffer[512];
 
-    //while (!feof(inptr))
-    //{
-        fread(&buffer, 1, 512, inptr);
-   /*     if (buffer[0] == 0xff &&
+    //while true to read all blocks in raw file
+    while (fread(&buffer, 512, 1, inptr) == 1)
+    {
+        if (buffer[0] == 0xff &&
             buffer[1] == 0xd8 &&
             buffer[2] == 0xff &&
-            (buffer[3] & 0xf0 ) == 0xe0)
-         {
-             printf("new jpeg found");
-
-         }
-*/
-        printf("bufer : %c\n", buffer[0]);
-    //}
+            (buffer[3] & 0xf0) == 0xe0)
+        {
+            if (imgFound)
+            {
+                fclose(outptr);
+            }
+            imgFound = 1;
+            sprintf(outfile, "%03i.jpg", outFileCnt);
+            outptr = fopen(outfile, "w");
+            outFileCnt++;
+        }
+        if (imgFound)
+        {
+            fwrite(&buffer, 512, 1, outptr);
+        }
+    }
 
     fclose(inptr);
-exit(0);
 }
 
